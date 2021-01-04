@@ -47,6 +47,7 @@ def classify():
         img = file.read()
         img_face = Image.open(io.BytesIO(img))
         img_dog = Image.open(io.BytesIO(img)).convert('RGB')
+        del img
         img_save = img_dog.save("app/images/image.jpg",'JPEG')
         file_size = os.path.getsize("app/images/image.jpg")
 
@@ -56,9 +57,12 @@ def classify():
 
         img_dog = Image.open("app/images/image.jpg")
         faces = face_detector(img_face)
-        dogs = dog_detector(img_dog)
+        del img_face
 
+        dogs = dog_detector(img_dog)
+        
         breeds = list(reversed(predict_breed(img_dog))) #.split(',')[0][1:-1]
+        del img_dog
         breeds = [breed.split(',')[0][1:-1] for breed in breeds]
         
         if faces:
@@ -71,6 +75,7 @@ def classify():
         #return_dict = {'file_name': str(file.filename), 'out':out}
         reset()
         img = None
+        img_face = None
         file = None
         faces = None
         dogs = None
