@@ -7,12 +7,18 @@ from werkzeug.utils import secure_filename
 from PIL import Image
 import io
 import os
-from app.utils import face_detector, dog_detector, get_breeds, predict_breed, reset
-
-app = Flask(__name__, static_url_path='/static')
+from app.utils import face_detector, dog_detector, get_breeds, predict_breed, reset, resize
 import os
 
+
+UPLOAD_FOLDER = "app/static/images"
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+app = Flask(__name__, static_url_path='/static')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+
 #face_cascade = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_alt.xml')
 
 def allowed_file(filename):
@@ -25,9 +31,31 @@ def file_size(filename):
 #GET IMAGE AS DIRECT INPUT INTO FILES
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    try:
+        os.remove(os.path.join(UPLOAD_FOLDER,'image.jpg'))
+    except:
+        pass
+
     return render_template('index.html')
 
-   
+
+@app.route('/upload', methods=['GET', 'POST'])
+def upload():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file is None or file.filename == "":
+            out = 'no file'
+            return render_template('index.html', prediction_text=out)
+        if not allowed_file(file.filename):
+            out = 'format not supported.'
+        
+
+        img = Image.open(io.BytesIO(file.read())) #.convert('RGB')
+        img = resize(img)
+        uploaded_image = os.path.join(app.config['UPLOAD_FOLDER'], 'image.jpg')
+        img.save(uploaded_image,'JPEG')
+
+        return render_template('index.html', uploaded_image = uploaded_image[4:], prediction_text = uploaded_image[4:])
     
 
 
@@ -46,19 +74,19 @@ def classify():
 
         #img = file.read()
         img = Image.open(io.BytesIO(file.read())).convert('RGB')
-        img_save = img.save("app/images/image.jpg",'JPEG')
-        file_size = os.path.getsize("app/images/image.jpg")
+        img_save = img.save("app/static/images/image.jpg",'JPEG')
+        file_size = os.path.getsize("app/static/images/image.jpg")
 
         if file_size > 600000:
-            img.save("app/images/image.jpg",'JPEG',optimize = True,  
+            img.save("app/static/images/image.jpg",'JPEG',optimize = True,  
                  quality = 15) 
         del img
         del img_save 
         del file_size
 
-        file_size = os.path.getsize("app/images/image.jpg")
+        file_size = os.path.getsize("app/static/images/image.jpg")
 
-        img = Image.open("app/images/image.jpg")
+        img = Image.open("app/static/images/image.jpg")
         #os.remove("app/images/image.jpg")
 
         faces = face_detector(img.convert('RGB'))
@@ -68,9 +96,9 @@ def classify():
         breeds = [breed.split(',')[0][1:-1] for breed in breeds]
         
         if faces:
-            out = f"Hello Hooman! You look a lot like a {breeds[0]}! {file_size}"
+            out = f"Hello Human! You look a lot like a {breeds[0]}!"
         elif dogs:
-            out = f"This doggo looks like a {breeds[0]}! {file_size}"
+            out = f"This dog looks like a {breeds[0]}!"
         else:
             out = f"Hmm, I dont see a Hooman or Doggo in this picture. Try another one!"
 
