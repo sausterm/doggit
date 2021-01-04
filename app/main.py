@@ -35,7 +35,7 @@ def index():
         os.remove(os.path.join(UPLOAD_FOLDER, f))
 
 
-    return render_template('index.html', try_another=0)
+    return render_template('index.html', upload_bool=1, classify_bool=0, try_another=0)
 
 
 @app.route('/upload', methods=['GET', 'POST'])
@@ -65,7 +65,7 @@ def upload():
         #img = Image.open(IMAGE_PATH)
         
 
-        return render_template('index.html', uploaded_image = IMAGE_PATH[4:],try_another=0)
+        return render_template('index.html', upload_bool=0, classify_bool=1, uploaded_image = IMAGE_PATH[4:],try_another=0)
     
 
 
@@ -115,7 +115,7 @@ def classify():
         faces = None
         dogs = None
         breeds = None    
-        return render_template('index.html', uploaded_image = IMAGE_PATH[4:], prediction_text=out,
+        return render_template('index.html', upload_bool=0, classify_bool=0, uploaded_image = IMAGE_PATH[4:], prediction_text=out,
                                 try_another=1)
 
         #    return jsonify({'error': 'error during prediction'})
