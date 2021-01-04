@@ -39,23 +39,24 @@ def index():
 def upload():
     global UPLOAD_FOLDER
     if request.method == 'GET':
-        try:
-            for f in os.listdir(UPLOAD_FOLDER):
+        for f in os.listdir(UPLOAD_FOLDER):
+            try:
                 os.remove(os.path.join(UPLOAD_FOLDER, f))
-        except:
-            pass
+            except:
+                pass
 
     return render_template('index.html', start_bool = 0, upload_bool=1, classify_bool=0, try_another=0)
 
 
 @app.route('/classify', methods=['GET', 'POST'])
 def classify():
+    global filename 
+    global IMAGE_PATH
+    global UPLOAD_FOLDER
     if request.method == 'POST':
         
         file = request.files['file']
-        global filename 
-        global IMAGE_PATH
-        global UPLOAD_FOLDER
+        
         filename = file.filename
         IMAGE_PATH = os.path.join(UPLOAD_FOLDER, filename)
         if file is None or filename == "":
@@ -91,6 +92,7 @@ def classify():
 @app.route('/result', methods=['GET'])
 def result():
     global filename
+
     if request.method == 'GET':
      #   os.rename(r'file path\OLD file name.file type',r'file path\NEW file name.file type')
 
