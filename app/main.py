@@ -57,16 +57,19 @@ def classify():
         global IMAGE_PATH
         global UPLOAD_FOLDER
         filename = file.filename
-        IMAGE_PATH = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        IMAGE_PATH = os.path.join(UPLOAD_FOLDER, filename)
         if file is None or filename == "":
             out = 'no file'
             return render_template('index.html', prediction_text=out)
         if not allowed_file(filename):
             out = 'format not supported.'
+            return render_template('index.html', prediction_text=out)
         
 
         img = Image.open(io.BytesIO(file.read())).convert('RGB') #.convert('RGB')
+        
         img.save(IMAGE_PATH,'JPEG')
+
         file_size = os.path.getsize(IMAGE_PATH)
         if file_size > 750000:
             try:
