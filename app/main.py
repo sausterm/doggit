@@ -15,6 +15,7 @@ UPLOAD_FOLDER = "app/static/images"
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 IMAGE_PATH = ""
 filename = ""
+
 app = Flask(__name__, static_url_path='/static')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -56,11 +57,11 @@ def classify():
         global IMAGE_PATH
         global UPLOAD_FOLDER
         filename = file.filename
-        IMAGE_PATH = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-        if file is None or file.filename == "":
+        IMAGE_PATH = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        if file is None or filename == "":
             out = 'no file'
             return render_template('index.html', prediction_text=out)
-        if not allowed_file(file.filename):
+        if not allowed_file(filename):
             out = 'format not supported.'
         
 
