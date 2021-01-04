@@ -38,10 +38,12 @@ def index():
 def upload():
     if request.method == 'GET':
         for f in os.listdir(UPLOAD_FOLDER):
-            os.remove(os.path.join(UPLOAD_FOLDER, f))
+            try:
+                os.remove(os.path.join(UPLOAD_FOLDER, f))
+            except:
+                pass
 
-
-        return render_template('index.html', start_bool = 0, upload_bool=1, classify_bool=0, try_another=0)
+    return render_template('index.html', start_bool = 0, upload_bool=1, classify_bool=0, try_another=0)
 
 
 @app.route('/classify', methods=['GET', 'POST'])
