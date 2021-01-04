@@ -38,6 +38,8 @@ def index():
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     global UPLOAD_FOLDER
+    global filename 
+    filename = ""
     for f in os.listdir(UPLOAD_FOLDER):
         os.remove(os.path.join(UPLOAD_FOLDER, f))
         
