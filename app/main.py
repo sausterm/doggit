@@ -59,7 +59,7 @@ def classify():
         file_size = os.path.getsize("app/images/image.jpg")
 
         img = Image.open("app/images/image.jpg")
-        os.remove("app/images/image.jpg")
+        #os.remove("app/images/image.jpg")
 
         faces = face_detector(img.convert('RGB'))
         dogs = dog_detector(img)
