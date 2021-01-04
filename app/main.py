@@ -58,8 +58,10 @@ def upload():
         file_size = os.path.getsize(IMAGE_PATH)
         if file_size > 600000:
             img = resize(img)
+        
+        img.save(IMAGE_PATH,'JPEG')
 
-        img = Image.open(IMAGE_PATH)
+        #img = Image.open(IMAGE_PATH)
         
 
         return render_template('index.html', uploaded_image = IMAGE_PATH[4:])
