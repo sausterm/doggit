@@ -97,7 +97,7 @@ def classify():
 @app.route('/result', methods=['GET'])
 def result():
     global filename
-    global IMAGE_PATH
+    global UPLOAD_FOLDER
     if request.method == 'GET':
         
      #   os.rename(r'file path\OLD file name.file type',r'file path\NEW file name.file type')
@@ -119,7 +119,7 @@ def result():
 
         #file_size = os.path.getsize("app/static/images/image.jpg")
         #img = file.read()
-        img = Image.open(IMAGE_PATH)
+        img = Image.open(os.path.join(UPLOAD_FOLDER, filename))
         #os.remove("app/images/image.jpg")
 
         faces = face_detector(img.convert('RGB'))
