@@ -39,11 +39,9 @@ def index():
 def upload():
     global UPLOAD_FOLDER
     if request.method == 'GET':
-        try:
-            for f in os.listdir(UPLOAD_FOLDER):
-                    os.remove(os.path.join(UPLOAD_FOLDER, f))
-        except:
-            pass
+        for f in os.listdir(UPLOAD_FOLDER):
+            os.remove(os.path.join(UPLOAD_FOLDER, f))
+        
     return render_template('index.html', start_bool = 0, upload_bool=1, classify_bool=0, try_another=0)
 
 
