@@ -44,32 +44,28 @@ def classify():
         
         #try:
 
-        img = file.read()
-        img_face = Image.open(io.BytesIO(img))
-        img_dog = Image.open(io.BytesIO(img)).convert('RGB')
-        del img
-
-        img_save = img_dog.save("app/images/image.jpg",'JPEG')
+        #img = file.read()
+        img = Image.open(io.BytesIO(file.read()))
+        img_save = img.save("app/images/image.jpg",'JPEG')
         file_size = os.path.getsize("app/images/image.jpg")
 
-        if file_size > 800000:
-            img_dog.save("app/images/image.jpg",'JPEG',optimize = True,  
-                 quality = 8) 
+        if file_size > 600000:
+            img.save("app/images/image.jpg",'JPEG',optimize = True,  
+                 quality = 15) 
 
-        img_dog = Image.open("app/images/image.jpg")
-        faces = face_detector(img_face)
-        del img_face
+        file_size = os.path.getsize("app/images/image.jpg")
 
-        dogs = dog_detector(img_dog)
-        
-        breeds = list(reversed(predict_breed(img_dog))) #.split(',')[0][1:-1]
-        del img_dog
+        img = Image.open("app/images/image.jpg")
+        faces = face_detector(img)
+        dogs = dog_detector(img)
+        breeds = list(reversed(predict_breed(img))) #.split(',')[0][1:-1]
+        del img
         breeds = [breed.split(',')[0][1:-1] for breed in breeds]
         
         if faces:
-            out = f"Hello Hooman! You look a lot like a {breeds[0]}!"
+            out = f"Hello Hooman! You look a lot like a {breeds[0]}! {file_size}"
         elif dogs:
-            out = f"This doggo looks like a {breeds[0]}!"
+            out = f"This doggo looks like a {breeds[0]}! {file_size}"
         else:
             out = f"Hmm, I dont see a Hooman or Doggo in this picture. Try another one!"
 
