@@ -29,6 +29,15 @@
 
    <br>
    {{ prediction_text }}
+   <br>
+   <br>
+
+   {% if try_another %}
+      <form action="/" method="GET">
+         <input type="submit" value="Try Another!" />
+      </form>
+   {% endif %}
+   
 </div>
 </body>
 </html>

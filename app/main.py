@@ -35,7 +35,7 @@ def index():
         os.remove(os.path.join(UPLOAD_FOLDER, f))
 
 
-    return render_template('index.html')
+    return render_template('index.html', try_another=0)
 
 
 @app.route('/upload', methods=['GET', 'POST'])
@@ -57,7 +57,7 @@ def upload():
         img = Image.open(io.BytesIO(file.read())).convert('RGB') #.convert('RGB')
         img.save(IMAGE_PATH,'JPEG')
         file_size = os.path.getsize(IMAGE_PATH)
-        if file_size > 600000:
+        if file_size > 750000:
             img = resize(img)
         
         img.save(IMAGE_PATH,'JPEG')
@@ -65,7 +65,7 @@ def upload():
         #img = Image.open(IMAGE_PATH)
         
 
-        return render_template('index.html', uploaded_image = IMAGE_PATH[4:])
+        return render_template('index.html', uploaded_image = IMAGE_PATH[4:],try_another=0)
     
 
 
@@ -105,7 +105,7 @@ def classify():
         elif dogs:
             out = f"This dog looks like a {breeds[0]}!"
         else:
-            out = f"Hmm, I dont see a Hooman or Doggo in this picture. Try another one!"
+            out = f"Sorry! The model doesn't recognize any dogs or humans in this picture. Please try another one!"
 
         #return_dict = {'file_name': str(file.filename), 'out':out}
         reset()
@@ -114,6 +114,8 @@ def classify():
         file = None
         faces = None
         dogs = None
-        breeds = None
-        return render_template('index.html', uploaded_image = IMAGE_PATH[4:], prediction_text=out)
+        breeds = None    
+        return render_template('index.html', uploaded_image = IMAGE_PATH[4:], prediction_text=out,
+                                try_another=1)
+
         #    return jsonify({'error': 'error during prediction'})
