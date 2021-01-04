@@ -88,7 +88,7 @@ def classify():
 
         #file_size = os.path.getsize("app/static/images/image.jpg")
         #img = file.read()
-        img = Image.open(IMAGE_PATH)
+        img = Image.open("app/static/images/{}".format(filename))
         #os.remove("app/images/image.jpg")
 
         faces = face_detector(img.convert('RGB'))
