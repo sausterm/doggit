@@ -36,6 +36,7 @@ def index():
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
+    global UPLOAD_FOLDER
     if request.method == 'GET':
         for f in os.listdir(UPLOAD_FOLDER):
             try:
@@ -53,6 +54,7 @@ def classify():
         file = request.files['file']
         global filename 
         global IMAGE_PATH
+        global UPLOAD_FOLDER
         filename = file.filename
         IMAGE_PATH = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         if file is None or file.filename == "":
