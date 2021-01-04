@@ -52,6 +52,7 @@ def classify():
     global filename 
     global IMAGE_PATH
     global UPLOAD_FOLDER
+
     if request.method == 'POST':
         
         file = request.files['file']
@@ -66,25 +67,29 @@ def classify():
             return render_template('index.html', prediction_text=out)
         
 
-        img = Image.open(io.BytesIO(file.read())).convert('RGB') #.convert('RGB')
-        
-        img.save(IMAGE_PATH,'JPEG')
-
-        file_size = os.path.getsize(IMAGE_PATH)
-        if file_size > 750000:
-            try:
-                os.remove(os.path.join(UPLOAD_FOLDER, filename))
-            except:
-                pass
-            img = resize(img)
+        try:
+            img = Image.open(io.BytesIO(file.read())).convert('RGB') #.convert('RGB')
             img.save(IMAGE_PATH,'JPEG')
+            file_size = os.path.getsize(IMAGE_PATH)
+        except:
+            out = "failed to save image at {}".format(IMAGE_PATH)
+
+
+        try:
+            if file_size > 750000:
+                img = resize(img)
+                img.save(IMAGE_PATH,'JPEG')
+         except:
+            out = "failed to resave large image at {}".format(IMAGE_PATH)
+
+
         
         
 
         #img = Image.open(IMAGE_PATH)
         
 
-        return render_template('index.html', upload_bool=0, classify_bool=1, uploaded_image = IMAGE_PATH[4:], try_another=0)
+        return render_template('index.html', upload_bool=0, classify_bool=1, uploaded_image = IMAGE_PATH[4:], try_another=0, prediction_text=out)
     
 
 
