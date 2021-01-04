@@ -32,10 +32,6 @@ def file_size(filename):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    for f in os.listdir(UPLOAD_FOLDER):
-        os.remove(os.path.join(UPLOAD_FOLDER, f))
-
-
     return render_template('index.html',start_bool = 1, upload_bool=0, classify_bool=0, try_another=0)
 
 @app.route('/upload', methods=['GET', 'POST'])
