@@ -29,17 +29,26 @@ def file_size(filename):
     os.stat('somefile.txt').st_size
 
 #GET IMAGE AS DIRECT INPUT INTO FILES
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     for f in os.listdir(UPLOAD_FOLDER):
         os.remove(os.path.join(UPLOAD_FOLDER, f))
 
 
-    return render_template('index.html', upload_bool=1, classify_bool=0, try_another=0)
-
+    return render_template('index.html',start_bool = 1, upload_bool=0, classify_bool=0, try_another=0)
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
+    for f in os.listdir(UPLOAD_FOLDER):
+        os.remove(os.path.join(UPLOAD_FOLDER, f))
+
+
+    return render_template('index.html', start_bool = 0, upload_bool=1, classify_bool=0, try_another=0)
+
+
+@app.route('/classify', methods=['GET', 'POST'])
+def classify():
     if request.method == 'POST':
         
         file = request.files['file']
@@ -69,8 +78,8 @@ def upload():
     
 
 
-@app.route('/classify', methods=['POST'])
-def classify():
+@app.route('/result', methods=['POST'])
+def result():
     if request.method == 'POST':
      #   os.rename(r'file path\OLD file name.file type',r'file path\NEW file name.file type')
 
