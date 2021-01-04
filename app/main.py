@@ -54,7 +54,7 @@ def classify():
     global UPLOAD_FOLDER
 
     if request.method == 'POST':
-        
+        out = ""
         file = request.files['file']
         
         filename = file.filename
@@ -75,12 +75,13 @@ def classify():
             out = "failed to save image at {}".format(IMAGE_PATH)
 
 
-        try:
-            if file_size > 750000:
+        
+        if file_size > 750000:
+            try:
                 img = resize(img)
                 img.save(IMAGE_PATH,'JPEG')
-        except:
-            out = "failed to resave large image at {}".format(IMAGE_PATH)
+            except:
+                out = "failed to resave large image at {}".format(IMAGE_PATH)
 
 
         
@@ -96,8 +97,9 @@ def classify():
 @app.route('/result', methods=['GET'])
 def result():
     global filename
-
+    global IMAGE_PATH
     if request.method == 'GET':
+        
      #   os.rename(r'file path\OLD file name.file type',r'file path\NEW file name.file type')
 
         
@@ -117,7 +119,7 @@ def result():
 
         #file_size = os.path.getsize("app/static/images/image.jpg")
         #img = file.read()
-        img = Image.open("app/static/images/{}".format(filename))
+        img = Image.open(IMAGE_PATH)
         #os.remove("app/images/image.jpg")
 
         faces = face_detector(img.convert('RGB'))
