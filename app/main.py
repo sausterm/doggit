@@ -70,7 +70,7 @@ def classify():
         #img = Image.open(IMAGE_PATH)
         
 
-        return render_template('index.html', upload_bool=0, classify_bool=1, uploaded_image = IMAGE_PATH[4:],try_another=0)
+        return render_template('index.html', upload_bool=0, classify_bool=1, uploaded_image = IMAGE_PATH[4:], try_another=0)
     
 
 

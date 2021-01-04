@@ -9,7 +9,7 @@
    <div class="container">
       <h1>Dog Breed Classifier</h1>
       {% if start_bool %}
-      <form action="/upload" method="GET">
+      <form action="/upload" method="POST">
          <input type="submit" value="Get Started!" />
       </form>
       {% endif %}
@@ -42,7 +42,7 @@
    <br>
 
    {% if try_another %}
-      <form action="/upload" method="GET">
+      <form action="/upload" method="POST">
          <input type="submit" value="Try Another!" />
       </form>
    {% endif %}
