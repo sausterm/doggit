@@ -48,10 +48,11 @@ def classify():
         img_face = Image.open(io.BytesIO(img))
         img_dog = Image.open(io.BytesIO(img)).convert('RGB')
         del img
+
         img_save = img_dog.save("app/images/image.jpg",'JPEG')
         file_size = os.path.getsize("app/images/image.jpg")
 
-        if file_size > 1000000:
+        if file_size > 800000:
             img_dog.save("app/images/image.jpg",'JPEG',optimize = True,  
                  quality = 10) 
 
