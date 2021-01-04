@@ -79,7 +79,7 @@ def classify():
             if file_size > 750000:
                 img = resize(img)
                 img.save(IMAGE_PATH,'JPEG')
-         except:
+        except:
             out = "failed to resave large image at {}".format(IMAGE_PATH)
 
 
