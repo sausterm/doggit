@@ -54,7 +54,7 @@ def classify():
 
         if file_size > 800000:
             img_dog.save("app/images/image.jpg",'JPEG',optimize = True,  
-                 quality = 10) 
+                 quality = 8) 
 
         img_dog = Image.open("app/images/image.jpg")
         faces = face_detector(img_face)
