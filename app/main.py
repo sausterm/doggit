@@ -45,18 +45,23 @@ def classify():
         #try:
 
         #img = file.read()
-        img = Image.open(io.BytesIO(file.read()))
+        img = Image.open(io.BytesIO(file.read())).convert('RGB')
         img_save = img.save("app/images/image.jpg",'JPEG')
         file_size = os.path.getsize("app/images/image.jpg")
 
         if file_size > 600000:
             img.save("app/images/image.jpg",'JPEG',optimize = True,  
                  quality = 15) 
+        del img
+        del img_save 
+        del file_size
 
         file_size = os.path.getsize("app/images/image.jpg")
 
         img = Image.open("app/images/image.jpg")
-        faces = face_detector(img)
+        os.remove("app/images/image.jpg")
+
+        faces = face_detector(img.convert('RGB'))
         dogs = dog_detector(img)
         breeds = list(reversed(predict_breed(img))) #.split(',')[0][1:-1]
         del img
