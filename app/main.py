@@ -69,9 +69,14 @@ def classify():
         img.save(IMAGE_PATH,'JPEG')
         file_size = os.path.getsize(IMAGE_PATH)
         if file_size > 750000:
+            try:
+                os.remove(os.path.join(UPLOAD_FOLDER, f))
+            except:
+                pass
             img = resize(img)
+            img.save(IMAGE_PATH,'JPEG')
         
-        img.save(IMAGE_PATH,'JPEG')
+        
 
         #img = Image.open(IMAGE_PATH)
         
