@@ -11,7 +11,7 @@ from app.utils import face_detector, dog_detector, get_breeds, predict_breed, re
 import os
 
 
-UPLOAD_FOLDER = "static/images"
+UPLOAD_FOLDER = "app/static/images"
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 IMAGE_PATH = ""
 filename = ""
