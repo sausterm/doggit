@@ -16,7 +16,7 @@ face_cascade = cv2.CascadeClassifier('app/opencv-front-face-default.xml')
 face_cascade2 = cv2.CascadeClassifier('app/haarcascade_frontalface_alt.xml')
 
 def resize(img):
-    img = cv2.resize(np.float32(img), (300, 300))
+    img = cv2.resize(np.float32(img), (500, 500))
     img = Image.fromarray(np.uint8(img)).convert('RGB')
     return img
 

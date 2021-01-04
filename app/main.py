@@ -13,10 +13,10 @@ import os
 
 UPLOAD_FOLDER = "app/static/images"
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
-
+IMAGE_PATH = ""
+filename = ""
 app = Flask(__name__, static_url_path='/static')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
 
 
 #face_cascade = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_alt.xml')
@@ -31,10 +31,9 @@ def file_size(filename):
 #GET IMAGE AS DIRECT INPUT INTO FILES
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    try:
-        os.remove(os.path.join(UPLOAD_FOLDER,'image.jpg'))
-    except:
-        pass
+    for f in os.listdir(UPLOAD_FOLDER):
+        os.remove(os.path.join(UPLOAD_FOLDER, f))
+
 
     return render_template('index.html')
 
@@ -43,6 +42,10 @@ def index():
 def upload():
     if request.method == 'POST':
         file = request.files['file']
+        global filename 
+        global IMAGE_PATH
+        filename = file.filename
+        IMAGE_PATH = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         if file is None or file.filename == "":
             out = 'no file'
             return render_template('index.html', prediction_text=out)
@@ -50,43 +53,42 @@ def upload():
             out = 'format not supported.'
         
 
-        img = Image.open(io.BytesIO(file.read())) #.convert('RGB')
-        img = resize(img)
-        uploaded_image = os.path.join(app.config['UPLOAD_FOLDER'], 'image.jpg')
-        img.save(uploaded_image,'JPEG')
+        img = Image.open(io.BytesIO(file.read())).convert('RGB') #.convert('RGB')
+        img.save(IMAGE_PATH,'JPEG')
+        file_size = os.path.getsize(IMAGE_PATH)
+        if file_size > 600000:
+            img = resize(img)
 
-        return render_template('index.html', uploaded_image = uploaded_image[4:], prediction_text = uploaded_image[4:])
+        img = Image.open(IMAGE_PATH)
+        
+
+        return render_template('index.html', uploaded_image = IMAGE_PATH[4:])
     
 
 
 @app.route('/classify', methods=['POST'])
 def classify():
     if request.method == 'POST':
-        file = request.files['file']
-        if file is None or file.filename == "":
-            out = 'no file'
-            return render_template('index.html', prediction_text=out)
-        if not allowed_file(file.filename):
-            out = 'format not supported.'
-            return render_template('index.html', prediction_text=out)
+     #   os.rename(r'file path\OLD file name.file type',r'file path\NEW file name.file type')
+
         
         #try:
 
         #img = file.read()
-        img = Image.open(io.BytesIO(file.read())).convert('RGB')
-        img_save = img.save("app/static/images/image.jpg",'JPEG')
-        file_size = os.path.getsize("app/static/images/image.jpg")
+        #img = Image.open(io.BytesIO(file.read())).convert('RGB')
+        #img_save = img.save("app/static/images/image.jpg",'JPEG')
+        #file_size = os.path.getsize("app/static/images/image.jpg")
 
-        if file_size > 600000:
-            img.save("app/static/images/image.jpg",'JPEG',optimize = True,  
-                 quality = 15) 
-        del img
-        del img_save 
-        del file_size
+        #if file_size > 600000:
+        #    img.save("app/static/images/image.jpg",'JPEG',optimize = True,  
+        #         quality = 15) 
+        #del img
+        #del img_save 
+        #del file_size
 
-        file_size = os.path.getsize("app/static/images/image.jpg")
-
-        img = Image.open("app/static/images/image.jpg")
+        #file_size = os.path.getsize("app/static/images/image.jpg")
+        #img = file.read()
+        img = Image.open(IMAGE_PATH)
         #os.remove("app/images/image.jpg")
 
         faces = face_detector(img.convert('RGB'))
@@ -110,5 +112,5 @@ def classify():
         faces = None
         dogs = None
         breeds = None
-        return render_template('index.html', prediction_text=out)
+        return render_template('index.html', uploaded_image = IMAGE_PATH[4:], prediction_text=out)
         #    return jsonify({'error': 'error during prediction'})
