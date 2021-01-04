@@ -31,7 +31,7 @@
    <center><img style="max-width: 450px; max-height: 400px" src="{{ uploaded_image }}"></center>
    <br>
    {% if classify_bool %}
-   <form action="/result" method="POST">
+   <form action="/result" method="GET">
       <input type="submit" value="Classify" />
    </form>
    {% endif %}
@@ -42,7 +42,7 @@
    <br>
 
    {% if try_another %}
-      <form action="/upload" method="POST">
+      <form action="/upload" method="GET">
          <input type="submit" value="Try Another!" />
       </form>
    {% endif %}
