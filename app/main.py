@@ -79,6 +79,7 @@ def classify():
 
 @app.route('/result', methods=['GET'])
 def result():
+    global filename
     if request.method == 'GET':
      #   os.rename(r'file path\OLD file name.file type',r'file path\NEW file name.file type')
 
