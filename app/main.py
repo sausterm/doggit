@@ -11,7 +11,7 @@ from app.utils import face_detector, dog_detector, get_breeds, predict_breed, re
 import os
 
 
-UPLOAD_FOLDER = "app/static/images"
+UPLOAD_FOLDER = "static/images"
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 IMAGE_PATH = ""
 filename = ""
@@ -70,7 +70,7 @@ def classify():
         file_size = os.path.getsize(IMAGE_PATH)
         if file_size > 750000:
             try:
-                os.remove(os.path.join(UPLOAD_FOLDER, f))
+                os.remove(os.path.join(UPLOAD_FOLDER, filename))
             except:
                 pass
             img = resize(img)
