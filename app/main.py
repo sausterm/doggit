@@ -38,8 +38,6 @@ def index():
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     global UPLOAD_FOLDER
-    global filename 
-    filename = ""
     for f in os.listdir(UPLOAD_FOLDER):
         os.remove(os.path.join(UPLOAD_FOLDER, f))
         
@@ -48,11 +46,12 @@ def upload():
 
 @app.route('/classify', methods=['GET', 'POST'])
 def classify():
-    global filename 
-    global IMAGE_PATH
-    global UPLOAD_FOLDER
+    
 
     if request.method == 'POST':
+        global filename 
+        global IMAGE_PATH
+        global UPLOAD_FOLDER
         out = ""
         file = request.files['file']
         
@@ -142,6 +141,8 @@ def result():
         faces = None
         dogs = None
         breeds = None    
+        filename = None
+        IMAGE_PATH = None
         return render_template('index.html', upload_bool=0, classify_bool=0, uploaded_image = IMAGE_PATH[4:], prediction_text=out,
                                 try_another=1)
 
