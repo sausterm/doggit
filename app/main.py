@@ -13,7 +13,7 @@ import os
 
 UPLOAD_FOLDER = "app/static/images"
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
-IMAGE_PATH = ""
+IMAGE_PATH = str()
 filename = str()
 
 app = Flask(__name__, static_url_path='/static')
@@ -24,7 +24,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
     # xxx.png
-    
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
@@ -34,6 +33,7 @@ def allowed_file(filename):
 def index():
     return render_template('index.html',start_bool = 1, upload_bool=0, classify_bool=0, try_another=0)
 
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     return render_template('index.html', start_bool = 0, upload_bool=1, classify_bool=0, try_another=0)
@@ -41,17 +41,16 @@ def upload():
 
 @app.route('/classify', methods=['GET', 'POST'])
 def classify():
-    global filename 
-    global IMAGE_PATH
-    global UPLOAD_FOLDER
+    
+    for f in os.listdir(app.config['UPLOAD_FOLDER']):
+        os.remove(os.path.join(app.config['UPLOAD_FOLDER'],f))
+
     if request.method == 'POST':
-        global filename 
-        out = ""
-
-        for f in os.listdir(app.config['UPLOAD_FOLDER']):
-            os.remove(os.path.join(app.config['UPLOAD_FOLDER'],f))
-
+        
         file = request.files['file']
+        global filename 
+        global IMAGE_PATH
+        global UPLOAD_FOLDER
         filename = str(file.filename)
         IMAGE_PATH = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         
@@ -76,9 +75,9 @@ def classify():
             # out = "failed to resave large image at {}".format(IMAGE_PATH)
 
 
-        #out1 = IMAGE_PATH, UPLOAD_FOLDER, filename
+        out1 = IMAGE_PATH, UPLOAD_FOLDER, filename
 
-        return render_template('index.html', upload_bool=0, classify_bool=1, uploaded_image = IMAGE_PATH[4:], try_another=0, prediction_text=out)
+        return render_template('index.html', upload_bool=0, classify_bool=1, uploaded_image = IMAGE_PATH[4:], try_another=0, prediction_text=out1)
     
 
 
