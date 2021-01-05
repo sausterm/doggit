@@ -46,15 +46,15 @@ def classify():
         os.remove(os.path.join(app.config['UPLOAD_FOLDER'],f))
     global filename 
     filename = str()
-    
+
     if request.method == 'POST':
         
         file = request.files['file']
-        global filename 
+        #global filename 
         global IMAGE_PATH
         global UPLOAD_FOLDER
         filename = str(file.filename)
-        
+        IMAGE_PATH = os.path.join(app.config['UPLOAD_FOLDER'],filename)
         if file is None or filename == "":
             out = 'no file'
             return render_template('index.html', prediction_text=out)
