@@ -43,10 +43,11 @@ def upload():
 
 @app.route('/classify', methods=['GET', 'POST'])
 def classify():
+    global filename 
+    global IMAGE_PATH
+    global UPLOAD_FOLDER
     if request.method == 'POST':
-        global filename 
-        global IMAGE_PATH
-        global UPLOAD_FOLDER
+        
         out = ""
 
         file = request.files['file']
