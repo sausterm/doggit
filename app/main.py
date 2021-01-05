@@ -44,7 +44,9 @@ def classify():
     
     for f in os.listdir(app.config['UPLOAD_FOLDER']):
         os.remove(os.path.join(app.config['UPLOAD_FOLDER'],f))
-
+    global filename 
+    filename = str()
+    
     if request.method == 'POST':
         
         file = request.files['file']
@@ -52,7 +54,6 @@ def classify():
         global IMAGE_PATH
         global UPLOAD_FOLDER
         filename = str(file.filename)
-        IMAGE_PATH = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         
         if file is None or filename == "":
             out = 'no file'
@@ -86,9 +87,6 @@ def result():
     if request.method == "GET":
         global filename
         img = Image.open("app/static/images/{}".format(filename))
-        #os.remove("app/images/image.jpg")
-
-
 
         faces = face_detector(img.convert('RGB'))
         dogs = dog_detector(img)
@@ -103,7 +101,6 @@ def result():
         else:
             out = f"Sorry! The model doesn't recognize any dogs or humans in this picture. Please try another one!"
 
-        #return_dict = {'file_name': str(file.filename), 'out':out}
         reset()
         img = None
         img_face = None
