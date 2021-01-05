@@ -45,15 +45,15 @@ def classify():
     global IMAGE_PATH
     global UPLOAD_FOLDER
     if request.method == 'POST':
-        
+        global filename 
         out = ""
 
-        for f in os.listdir(UPLOAD_FOLDER):
-            os.remove(os.path.join(UPLOAD_FOLDER,f))
+        for f in os.listdir(app.config['UPLOAD_FOLDER']):
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'],f))
 
         file = request.files['file']
-        filename = file.filename
-        IMAGE_PATH = os.path.join(UPLOAD_FOLDER, filename)
+        filename = str(file.filename)
+        IMAGE_PATH = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         
         if file is None or filename == "":
             out = 'no file'
