@@ -142,7 +142,7 @@ def result():
         dogs = None
         breeds = None    
         filename = None
-        IMAGE_PATH = None
+        #IMAGE_PATH = None
         return render_template('index.html', upload_bool=0, classify_bool=0, uploaded_image = IMAGE_PATH[4:], prediction_text=out,
                                 try_another=1)
 
