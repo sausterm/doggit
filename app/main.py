@@ -44,6 +44,7 @@ def classify():
     
     for f in os.listdir(app.config['UPLOAD_FOLDER']):
         os.remove(os.path.join(app.config['UPLOAD_FOLDER'],f))
+    
     global filename 
     filename = str()
 
@@ -55,6 +56,7 @@ def classify():
         global UPLOAD_FOLDER
         filename = str(file.filename)
         IMAGE_PATH = os.path.join(app.config['UPLOAD_FOLDER'],filename)
+
         if file is None or filename == "":
             out = 'no file'
             return render_template('index.html', prediction_text=out)
@@ -86,7 +88,7 @@ def classify():
 def result():
     if request.method == "GET":
         global filename
-        img = Image.open("app/static/images/{}".format(filename))
+        img = Image.open(os.path.join(app.config['UPLOAD_FOLDER'],filename))
 
         faces = face_detector(img.convert('RGB'))
         dogs = dog_detector(img)
