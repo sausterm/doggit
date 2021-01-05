@@ -2,7 +2,7 @@
 #  export FLASK_ENV=development
 # flask run
 
-from flask import Flask, request,jsonify, redirect, url_for, render_template, send_from_directory
+from flask import Flask, request,jsonify, redirect, url_for, render_template, send_from_directory, session
 from werkzeug.utils import secure_filename
 from PIL import Image
 import io
@@ -18,7 +18,7 @@ filename = str()
 
 app = Flask(__name__, static_url_path='/static')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
+app.secret_key = '12345'
 
 #face_cascade = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_alt.xml')
 
@@ -44,17 +44,13 @@ def classify():
     
     for f in os.listdir(app.config['UPLOAD_FOLDER']):
         os.remove(os.path.join(app.config['UPLOAD_FOLDER'],f))
-    
-    global filename 
-    filename = str()
-
+ 
     if request.method == 'POST':
         
         file = request.files['file']
-        #global filename 
-        global IMAGE_PATH
-        global UPLOAD_FOLDER
-        filename = str(file.filename)
+        filename = file.filename
+        session['filename'] = filename
+
         IMAGE_PATH = os.path.join(app.config['UPLOAD_FOLDER'],filename)
 
         if file is None or filename == "":
@@ -69,14 +65,11 @@ def classify():
         img.save(IMAGE_PATH,'JPEG')
         file_size = os.path.getsize(IMAGE_PATH)
             #out = "failed to save image at {}".format(IMAGE_PATH)
-
-
         
         if file_size > 750000:
             img = resize(img)
             img.save(IMAGE_PATH,'JPEG')
             # out = "failed to resave large image at {}".format(IMAGE_PATH)
-
 
         out1 = IMAGE_PATH, UPLOAD_FOLDER, filename
 
@@ -87,8 +80,9 @@ def classify():
 @app.route('/result', methods=['GET'])
 def result():
     if request.method == "GET":
-        global filename
-        img = Image.open("app/static/images/{}".format(filename))
+        filename = session.pop('filename', None)
+        IMAGE_PATH = os.path.join(app.config['UPLOAD_FOLDER'],filename)
+        img = Image.open(f"app/static/images/{filename}")
 
         faces = face_detector(img.convert('RGB'))
         dogs = dog_detector(img)
@@ -103,6 +97,7 @@ def result():
         else:
             out = f"Sorry! The model doesn't recognize any dogs or humans in this picture. Please try another one!"
 
+
         reset()
         img = None
         img_face = None
@@ -112,7 +107,5 @@ def result():
         breeds = None    
         
         #IMAGE_PATH = None
-        return render_template('index.html', upload_bool=0, classify_bool=0, uploaded_image = IMAGE_PATH[4:], prediction_text=out,
-                                try_another=1)
-
-        #    return jsonify({'error': 'error during prediction'})
+        return render_template('index.html', upload_bool=0, classify_bool=0, uploaded_image = IMAGE_PATH[4:], 
+                                prediction_text=out,ctry_another=1)
