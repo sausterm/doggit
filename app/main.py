@@ -82,20 +82,22 @@ def classify():
                 out = "failed to resave large image at {}".format(IMAGE_PATH)
 
 
-        out = IMAGE_PATH, UPLOAD_FOLDER, filename
+        out1 = IMAGE_PATH, UPLOAD_FOLDER, filename
         
 
         #img = Image.open(IMAGE_PATH)
         
 
-        return render_template('index.html', upload_bool=0, classify_bool=1, uploaded_image = IMAGE_PATH[4:], try_another=0, prediction_text=out)
+        return render_template('index.html', upload_bool=0, classify_bool=1, uploaded_image = IMAGE_PATH[4:], try_another=0, prediction_text=out,out1)
     
 
 
 @app.route('/result', methods=['GET'])
 def result():
-    if request.method == 'GET':
-        global filename
+    global filename
+    
+    if request.method == "GET":
+        
      #   os.rename(r'file path\OLD file name.file type',r'file path\NEW file name.file type')
 
         
@@ -115,7 +117,7 @@ def result():
 
         #file_size = os.path.getsize("app/static/images/image.jpg")
         #img = file.read()
-        img = Image.open(os.path.join(UPLOAD_FOLDER, filename))
+        img = Image.open("app/static/image/{}".format(filename))
         #os.remove("app/images/image.jpg")
 
         faces = face_detector(img.convert('RGB'))
