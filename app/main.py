@@ -83,9 +83,8 @@ def classify():
 
 @app.route('/result', methods=['GET'])
 def result():
-    global filename
     if request.method == "GET":
-        
+        global filename
         img = Image.open("app/static/images/{}".format(filename))
         #os.remove("app/images/image.jpg")
 
