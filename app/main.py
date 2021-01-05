@@ -46,7 +46,7 @@ def classify():
         os.remove(os.path.join(app.config['UPLOAD_FOLDER'],f))
  
     if request.method == 'POST':
-        
+        out = str()
         file = request.files['file']
         filename = file.filename
         session['filename'] = filename
@@ -71,13 +71,14 @@ def classify():
             img.save(IMAGE_PATH,'JPEG')
             # out = "failed to resave large image at {}".format(IMAGE_PATH)
 
-        return render_template('index.html', upload_bool=0, classify_bool=1, uploaded_image = IMAGE_PATH[4:], try_another=0, prediction_text=out1)
+        return render_template('index.html', upload_bool=0, classify_bool=1, uploaded_image = IMAGE_PATH[4:], try_another=0, prediction_text=out)
     
 
 
 @app.route('/result', methods=['GET'])
 def result():
     if request.method == "GET":
+        
         filename = session.pop('filename', None)
         IMAGE_PATH = os.path.join(app.config['UPLOAD_FOLDER'],filename)
         img = Image.open(f"app/static/images/{filename}")
