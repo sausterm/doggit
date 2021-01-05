@@ -87,8 +87,7 @@ def classify():
 @app.route('/result', methods=['GET'])
 def result():
     if request.method == "GET":
-        global filename
-        img = Image.open(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+        img = Image.open("app/static/images/{}".format(filename))
 
         faces = face_detector(img.convert('RGB'))
         dogs = dog_detector(img)
