@@ -26,8 +26,7 @@ def allowed_file(filename):
     # xxx.png
     
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-def file_size(filename):
-    os.stat('somefile.txt').st_size
+
 
 #GET IMAGE AS DIRECT INPUT INTO FILES
 
@@ -64,7 +63,7 @@ def classify():
             return render_template('index.html', prediction_text=out)
         
 
-        img = Image.open(io.BytesIO(file.read())).convert('RGB') #.convert('RGB')
+        img = Image.open(io.BytesIO(file.read())).convert('RGB') 
         img.save(IMAGE_PATH,'JPEG')
         file_size = os.path.getsize(IMAGE_PATH)
             #out = "failed to save image at {}".format(IMAGE_PATH)
@@ -91,6 +90,8 @@ def result():
         img = Image.open("app/static/images/{}".format(filename))
         #os.remove("app/images/image.jpg")
 
+
+
         faces = face_detector(img.convert('RGB'))
         dogs = dog_detector(img)
         breeds = list(reversed(predict_breed(img))) #.split(',')[0][1:-1]
@@ -112,7 +113,7 @@ def result():
         faces = None
         dogs = None
         breeds = None    
-        filename = None
+        
         #IMAGE_PATH = None
         return render_template('index.html', upload_bool=0, classify_bool=0, uploaded_image = IMAGE_PATH[4:], prediction_text=out,
                                 try_another=1)
