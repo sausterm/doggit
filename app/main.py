@@ -38,6 +38,7 @@ def index():
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     global UPLOAD_FOLDER
+    
     for f in os.listdir(UPLOAD_FOLDER):
         os.remove(os.path.join(UPLOAD_FOLDER, f))
         
@@ -46,17 +47,16 @@ def upload():
 
 @app.route('/classify', methods=['GET', 'POST'])
 def classify():
-    
-
     if request.method == 'POST':
         global filename 
         global IMAGE_PATH
         global UPLOAD_FOLDER
         out = ""
+
         file = request.files['file']
-        
         filename = file.filename
         IMAGE_PATH = os.path.join(UPLOAD_FOLDER, filename)
+        
         if file is None or filename == "":
             out = 'no file'
             return render_template('index.html', prediction_text=out)
@@ -82,7 +82,7 @@ def classify():
                 out = "failed to resave large image at {}".format(IMAGE_PATH)
 
 
-        
+        out = IMAGE_PATH, UPLOAD_FOLDER, filename
         
 
         #img = Image.open(IMAGE_PATH)
@@ -94,8 +94,6 @@ def classify():
 
 @app.route('/result', methods=['GET'])
 def result():
-    global filename
-    global UPLOAD_FOLDER
     if request.method == 'GET':
         
      #   os.rename(r'file path\OLD file name.file type',r'file path\NEW file name.file type')
