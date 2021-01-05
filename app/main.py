@@ -71,8 +71,6 @@ def classify():
             img.save(IMAGE_PATH,'JPEG')
             # out = "failed to resave large image at {}".format(IMAGE_PATH)
 
-        out1 = IMAGE_PATH, UPLOAD_FOLDER, filename
-
         return render_template('index.html', upload_bool=0, classify_bool=1, uploaded_image = IMAGE_PATH[4:], try_another=0, prediction_text=out1)
     
 
