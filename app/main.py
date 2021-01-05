@@ -14,7 +14,7 @@ import os
 UPLOAD_FOLDER = "app/static/images"
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 IMAGE_PATH = ""
-filename = ""
+filename = str()
 
 app = Flask(__name__, static_url_path='/static')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
