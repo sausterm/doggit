@@ -62,58 +62,30 @@ def classify():
             return render_template('index.html', prediction_text=out)
         
 
-        try:
-            img = Image.open(io.BytesIO(file.read())).convert('RGB') #.convert('RGB')
-            img.save(IMAGE_PATH,'JPEG')
-            file_size = os.path.getsize(IMAGE_PATH)
-        except:
-            out = "failed to save image at {}".format(IMAGE_PATH)
+        img = Image.open(io.BytesIO(file.read())).convert('RGB') #.convert('RGB')
+        img.save(IMAGE_PATH,'JPEG')
+        file_size = os.path.getsize(IMAGE_PATH)
+            #out = "failed to save image at {}".format(IMAGE_PATH)
 
 
         
         if file_size > 750000:
-            try:
-                img = resize(img)
-                img.save(IMAGE_PATH,'JPEG')
-            except:
-                out = "failed to resave large image at {}".format(IMAGE_PATH)
+            img = resize(img)
+            img.save(IMAGE_PATH,'JPEG')
+            # out = "failed to resave large image at {}".format(IMAGE_PATH)
 
 
-        out1 = IMAGE_PATH, UPLOAD_FOLDER, filename
-        
+        #out1 = IMAGE_PATH, UPLOAD_FOLDER, filename
 
-        #img = Image.open(IMAGE_PATH)
-        
-
-        return render_template('index.html', upload_bool=0, classify_bool=1, uploaded_image = IMAGE_PATH[4:], try_another=0, prediction_text=(out,out1))
+        return render_template('index.html', upload_bool=0, classify_bool=1, uploaded_image = IMAGE_PATH[4:], try_another=0, prediction_text=out)
     
 
 
 @app.route('/result', methods=['GET'])
 def result():
     global filename
-    
     if request.method == "GET":
         
-     #   os.rename(r'file path\OLD file name.file type',r'file path\NEW file name.file type')
-
-        
-        #try:
-
-        #img = file.read()
-        #img = Image.open(io.BytesIO(file.read())).convert('RGB')
-        #img_save = img.save("app/static/images/image.jpg",'JPEG')
-        #file_size = os.path.getsize("app/static/images/image.jpg")
-
-        #if file_size > 600000:
-        #    img.save("app/static/images/image.jpg",'JPEG',optimize = True,  
-        #         quality = 15) 
-        #del img
-        #del img_save 
-        #del file_size
-
-        #file_size = os.path.getsize("app/static/images/image.jpg")
-        #img = file.read()
         img = Image.open("app/static/images/{}".format(filename))
         #os.remove("app/images/image.jpg")
 
